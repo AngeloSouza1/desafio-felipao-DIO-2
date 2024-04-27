@@ -41,8 +41,9 @@ Instruções para entrega
 ---
 ### Objetivo:
 
+<div align="justify">
 Crie uma função que recebe como parâmetro a quantidade de vitórias e derrotas de um jogador,
-depois disso retorne o resultado para uma variável, o saldo de Rankeadas deve ser feito através do calculo (vitórias - derrotas)
+depois disso retorne o resultado para uma variável, o saldo de Rankeadas deve ser feito através do calculo (vitórias - derrotas)<p>
 
 🔹Se vitórias for menor do que 10 = Ferro<p>
 🔹Se vitórias for entre 11 e 20 = Bronze<p>
@@ -51,6 +52,7 @@ depois disso retorne o resultado para uma variável, o saldo de Rankeadas deve s
 🔹Se vitórias for entre 81 e 90 = Diamante<p>
 🔹Se vitórias for entre 91 e 100= Lendário<p>
 🔹Se vitórias for maior ou igual a 101 = Imortal<p>
+</div>
 
 ---
 
