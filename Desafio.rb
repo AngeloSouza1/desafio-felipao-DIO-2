@@ -86,13 +86,24 @@ def print_table_right(screen_width, heroes)
   # Classifica os heróis com base no nível (o segundo elemento do resultado da função calcular_rankeadas)
   heroes_sorted = heroes.sort_by { |hero| calcular_rankeadas(hero[:vitorias], hero[:derrotas])[0] }.reverse
 
+  # Calcular o comprimento máximo de cada coluna
+  max_length_nome = heroes_sorted.map { |hero| hero[:nome].length }.max
+  max_length_status = heroes_sorted.map { |hero| calcular_rankeadas(hero[:vitorias], hero[:derrotas])[1].length }.max
+
   # Imprime os dados de cada herói
   heroes_sorted.each_with_index do |hero, index|
-    nome = hero[:nome].ljust(20)
+    nome = hero[:nome].ljust(max_length_nome)
     resultado = calcular_rankeadas(hero[:vitorias], hero[:derrotas])
-    status = resultado[1]
-    # ajustar esta saída
-    puts "\e[#{index + 7};#{x_position}H| #{nome} | #{status} "
+    status = resultado[1].ljust(max_length_status)
+
+    # Calcula o comprimento restante da célula da tabela após a impressão do nome e da barra
+    remaining_length = 80 - max_length_nome - max_length_status - 7
+
+    # Ajusta o status à direita dentro da célula da tabela
+    status_cell = status.ljust(remaining_length)
+
+    # Imprime a linha da tabela
+    puts "\e[#{index + 7};#{x_position}H| #{nome} | #{status_cell}     |"
   end
 
   # Linha inferior da tabela
