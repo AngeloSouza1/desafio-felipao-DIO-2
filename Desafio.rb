@@ -35,15 +35,15 @@ end
 def mensagem_superior(screen_width)
   mensagem_superior = " Essa aplicação tem como objetivo,".colorize(:yellow)
   mensagem_superior1= " testar a função".colorize(:yellow) + " CALCULAR_RANKEADAS".colorize(:cyan)
-  mensagem_superior2 = " Projeto proposto pela DIO".colorize(:yellow)
-  mensagem_superior3 = " --- Bootcamp Santander ---".colorize( color: :light_red)
+  mensagem_superior2 = "    Projeto proposto pela  D I O".colorize(:yellow)
+  mensagem_superior3 = "    --- Bootcamp Santander ---".colorize( color: :light_red)
   mensagem_superior4 = " Para testar, aperte a tecla ENTER".colorize(:green)
   largura_mensagem = mensagem_superior.length  # Obtém a largura da mensagem
   x_superior = (screen_width - largura_mensagem)-138/ 2  # Calcula a posição horizontal para centralizar a mensagem
-  puts "\e[20;#{x_superior}H" + mensagem_superior
-  puts "\e[22;#{x_superior}H" + mensagem_superior1
-  puts "\e[24;#{x_superior}H" + mensagem_superior2
-  puts "\e[26;#{x_superior}H" + mensagem_superior3
+  puts "\e[16;#{x_superior}H" + mensagem_superior
+  puts "\e[18;#{x_superior}H" + mensagem_superior1
+  puts "\e[20;#{x_superior}H" + mensagem_superior2
+  puts "\e[22;#{x_superior}H" + mensagem_superior3
   puts "\e[30;#{x_superior}H" + mensagem_superior4
 end
 
@@ -69,7 +69,7 @@ puts "+" + "-" * 50 + "+"
 
 end
 
-def print_table_right(screen_width)
+def print_table_right(screen_width, heroes)
   table_width = 80  # Largura da tabela
   x_position = screen_width - table_width - 1  # Posição inicial da tabela
 
@@ -83,29 +83,61 @@ def print_table_right(screen_width)
   # Linha intermediária da tabela
   puts "\e[6;#{x_position}H+" + "-" * (table_width - 2) + "+"
 
+  # Imprime os dados de cada herói
+  heroes.each_with_index do |hero, index|
+    nome = hero[:nome].ljust(20)
+    resultado = calcular_rankeadas(hero[:vitorias], hero[:derrotas])
+    status = resultado[1]
+    puts "\e[#{index + 7};#{x_position}H| #{nome} | #{status} |"
+  end
+
   # Linha inferior da tabela
-  puts "\e[7;#{x_position}H+" + "-" * (table_width - 2) + "+"
+  puts "\e[#{heroes.length + 7};#{x_position}H+" + "-" * (table_width - 2) + "+"
 end
 
-
-
+''
 def calcular_rankeadas(vitorias, derrotas)
   saldo_vitorias = vitorias - derrotas
 
-  nivel = if vitorias < 10
-            "Ferro"
-          elsif vitorias.between?(11, 20)
-            "Bronze"
-          elsif vitorias.between?(21, 50)
-            "Prata"
-          elsif vitorias.between?(51, 80)
-            "Ouro"
-          elsif vitorias.between?(81, 90)
-            "Diamante"
-          elsif vitorias.between?(91, 100)
-            "Lendário"
+            def print_table_right(screen_width, heroes)
+              table_width = 80  # Largura da tabela
+              x_position = screen_width - table_width - 1  # Posição inicial da tabela
+
+              # Linha superior da tabela
+              puts "\e[4;#{x_position}H+" + "-" * (table_width - 2) + "+"
+
+              # Cabeçalho da tabela com fundo azul
+              cabecalho = "| #{'Herói'.ljust(20)} | #{'Status'.center(52)}  |"
+              puts "\e[5;#{x_position}H#{cabecalho.colorize(background: :blue)}"
+
+              # Linha intermediária da tabela
+              puts "\e[6;#{x_position}H+" + "-" * (table_width - 2) + "+"
+
+              # Imprime os dados de cada herói
+              heroes.each_with_index do |hero, index|
+                nome = hero[:nome].ljust(20)
+                resultado = calcular_rankeadas(hero[:vitorias], hero[:derrotas])
+                status = resultado[1].center(52)
+                puts "\e[#{index + 7};#{x_position}H| #{nome} | #{status} |"
+              end
+
+              # Linha inferior da tabela
+              puts "\e[#{heroes.length + 7};#{x_position}H+" + "-" * (table_width - 2) + "+"
+            end
+  nivel = if saldo_vitorias < 10
+            "O Herói tem de saldo de  #{saldo_vitorias} está no nível de Ferro".colorize(:light_green)
+          elsif saldo_vitorias.between?(11, 20)
+            "O Herói tem de saldo de #{saldo_vitorias} está no nível de Bronze".colorize(:light_yellow)
+          elsif saldo_vitorias.between?(21, 50)
+            "O Herói tem de saldo de #{saldo_vitorias} está no nível de Prata".colorize(:light_blue)
+          elsif saldo_vitorias.between?(51, 80)
+            "O Herói tem de saldo de #{saldo_vitorias} está no nível de Ouro".colorize(:yellow)
+          elsif saldo_vitorias.between?(81, 90)
+            "O Herói tem de saldo de #{saldo_vitorias} está no nível de Diamante".colorize(:white)
+          elsif saldo_vitorias.between?(91, 100)
+            "O Herói tem de saldo de #{saldo_vitorias} está no nível de Lendário".colorize(:cyan)
           else
-            "Imortal"
+            "O Herói tem de saldo de #{saldo_vitorias} está no nível de Imortal".colorize(:light_cyan)
           end
 
   return saldo_vitorias, nivel
@@ -157,9 +189,9 @@ print_header(screen_width)
 # Imprime a tabela de heróis
  print_table(heroes)
 
-imagem_trofeu(10, 5, 48)
- print_table_right(screen_width)
+ imagem_trofeu(10, 5, 48)
 
+  print_table_right(screen_width, heroes)
 
 mensagem_superior(screen_width)
 
