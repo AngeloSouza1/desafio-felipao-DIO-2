@@ -83,19 +83,24 @@ def print_table_right(screen_width, heroes)
   # Linha intermediária da tabela
   puts "\e[6;#{x_position}H+" + "-" * (table_width - 2) + "+"
 
+  # Classifica os heróis com base no nível (o segundo elemento do resultado da função calcular_rankeadas)
+  heroes_sorted = heroes.sort_by { |hero| calcular_rankeadas(hero[:vitorias], hero[:derrotas])[0] }.reverse
+
   # Imprime os dados de cada herói
-  heroes.each_with_index do |hero, index|
+  heroes_sorted.each_with_index do |hero, index|
     nome = hero[:nome].ljust(20)
     resultado = calcular_rankeadas(hero[:vitorias], hero[:derrotas])
     status = resultado[1]
-    puts "\e[#{index + 7};#{x_position}H| #{nome} | #{status} |"
+    # ajustar esta saída
+    puts "\e[#{index + 7};#{x_position}H| #{nome} | #{status} "
   end
 
   # Linha inferior da tabela
-  puts "\e[#{heroes.length + 7};#{x_position}H+" + "-" * (table_width - 2) + "+"
+  puts "\e[#{heroes_sorted.length + 7};#{x_position}H+" + "-" * (table_width - 2) + "+"
 end
 
-''
+
+
 def calcular_rankeadas(vitorias, derrotas)
   saldo_vitorias = vitorias - derrotas
 
@@ -106,25 +111,11 @@ def calcular_rankeadas(vitorias, derrotas)
               # Linha superior da tabela
               puts "\e[4;#{x_position}H+" + "-" * (table_width - 2) + "+"
 
-              # Cabeçalho da tabela com fundo azul
-              cabecalho = "| #{'Herói'.ljust(20)} | #{'Status'.center(52)}  |"
-              puts "\e[5;#{x_position}H#{cabecalho.colorize(background: :blue)}"
-
-              # Linha intermediária da tabela
-              puts "\e[6;#{x_position}H+" + "-" * (table_width - 2) + "+"
-
-              # Imprime os dados de cada herói
-              heroes.each_with_index do |hero, index|
-                nome = hero[:nome].ljust(20)
-                resultado = calcular_rankeadas(hero[:vitorias], hero[:derrotas])
-                status = resultado[1].center(52)
-                puts "\e[#{index + 7};#{x_position}H| #{nome} | #{status} |"
-              end
 
               # Linha inferior da tabela
               puts "\e[#{heroes.length + 7};#{x_position}H+" + "-" * (table_width - 2) + "+"
             end
-  nivel = if saldo_vitorias < 10
+          nivel = if saldo_vitorias < 10
             "O Herói tem de saldo de  #{saldo_vitorias} está no nível de Ferro".colorize(:light_green)
           elsif saldo_vitorias.between?(11, 20)
             "O Herói tem de saldo de #{saldo_vitorias} está no nível de Bronze".colorize(:light_yellow)
